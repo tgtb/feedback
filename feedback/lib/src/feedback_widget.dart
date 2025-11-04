@@ -392,8 +392,10 @@ class _FeedbackLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    if (!displayFeedback) {
+    if (!displayFeedback && animationProgress == 0) {
       layoutChild(_screenshotId, BoxConstraints.tight(size));
+      // Explicitly position at zero offset - fixes layout offset on physical Android devices
+      positionChild(_screenshotId, Offset.zero);
       return;
     }
     // Lay out the controls.

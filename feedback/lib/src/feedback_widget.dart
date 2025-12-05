@@ -161,6 +161,7 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                     child: widget.child,
                   ),
                 ),
+                // child: widget.child,
                 builder: (context, screenshotChild) {
                   return CustomMultiChildLayout(
                     delegate: _FeedbackLayoutDelegate(
@@ -172,40 +173,35 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                     children: [
                       LayoutId(
                         id: _screenshotId,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          child: ScaleAndFade(
-                            progress: sheetProgress,
-                            minScale: .7,
-                            // If opacity reaches zero, flutter will stop
-                            // drawing the child widget which breaks the
-                            // screenshot.
-                            minOpacity: .01,
-                            child:
-                                LayoutBuilder(builder: (context, constraints) {
-                              final size = MediaQuery.of(context).size;
-                              return OverflowBox(
-                                // Allow the screenshot to overflow to the full
-                                // screen size and then scale it down to meet
-                                // it's parent's constraints.
-                                maxWidth: size.width,
-                                maxHeight: size.height,
-                                child: ScaleAndClip(
-                                  progress: animation.value,
-                                  // Scale down to fit the constraints.
-                                  // `_FeedbackLayoutDelegate` ensures that the
-                                  // constraints are the same aspect ratio as
-                                  // the query size.
-                                  scaleFactor:
-                                      constraints.maxWidth / size.width,
-                                  child: LayoutBuilder(
-                                      builder: (context, constraints) {
-                                    return screenshotChild!;
-                                  }),
-                                ),
-                              );
-                            }),
-                          ),
+                        child: ScaleAndFade(
+                          progress: sheetProgress,
+                          minScale: .7,
+                          // If opacity reaches zero, flutter will stop
+                          // drawing the child widget which breaks the
+                          // screenshot.
+                          minOpacity: .01,
+                          child: LayoutBuilder(builder: (context, constraints) {
+                            final size = MediaQuery.of(context).size;
+                            return OverflowBox(
+                              // Allow the screenshot to overflow to the full
+                              // screen size and then scale it down to meet
+                              // it's parent's constraints.
+                              maxWidth: size.width,
+                              maxHeight: size.height,
+                              child: ScaleAndClip(
+                                progress: animation.value,
+                                // Scale down to fit the constraints.
+                                // `_FeedbackLayoutDelegate` ensures that the
+                                // constraints are the same aspect ratio as
+                                // the query size.
+                                scaleFactor: constraints.maxWidth / size.width,
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  return screenshotChild!;
+                                }),
+                              ),
+                            );
+                          }),
                         ),
                       ),
                       if (!animation.isDismissed)

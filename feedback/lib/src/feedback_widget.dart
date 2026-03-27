@@ -207,40 +207,37 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                       if (!animation.isDismissed)
                         LayoutId(
                           id: _controlsColumnId,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: padding),
-                            child: ScaleAndFade(
-                              progress: sheetProgress,
-                              minScale: .7,
-                              child: ControlsColumn(
-                                mode: mode,
-                                activeColor: painterController.drawColor,
-                                colors: widget.drawColors,
-                                onColorChanged: (color) {
-                                  setState(() {
-                                    painterController.drawColor = color;
-                                  });
+                          child: ScaleAndFade(
+                            progress: sheetProgress,
+                            minScale: .7,
+                            child: ControlsColumn(
+                              mode: mode,
+                              activeColor: painterController.drawColor,
+                              colors: widget.drawColors,
+                              onColorChanged: (color) {
+                                setState(() {
+                                  painterController.drawColor = color;
+                                });
+                                _hideKeyboard(context);
+                              },
+                              onUndo: () {
+                                painterController.undo();
+                                _hideKeyboard(context);
+                              },
+                              onClearDrawing: () {
+                                painterController.clear();
+                                _hideKeyboard(context);
+                              },
+                              onControlModeChanged: (mode) {
+                                setState(() {
+                                  this.mode = mode;
                                   _hideKeyboard(context);
-                                },
-                                onUndo: () {
-                                  painterController.undo();
-                                  _hideKeyboard(context);
-                                },
-                                onClearDrawing: () {
-                                  painterController.clear();
-                                  _hideKeyboard(context);
-                                },
-                                onControlModeChanged: (mode) {
-                                  setState(() {
-                                    this.mode = mode;
-                                    _hideKeyboard(context);
-                                  });
-                                },
-                                onCloseFeedback: () {
-                                  _hideKeyboard(context);
-                                  BetterFeedback.of(context).hide();
-                                },
-                              ),
+                                });
+                              },
+                              onCloseFeedback: () {
+                                _hideKeyboard(context);
+                                BetterFeedback.of(context).hide();
+                              },
                             ),
                           ),
                         ),

@@ -182,6 +182,10 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                           minOpacity: .01,
                           child: LayoutBuilder(builder: (context, constraints) {
                             final size = MediaQuery.of(context).size;
+                            if (widget.mode == FeedbackMode.hidden &&
+                                !animation.isDismissed) {
+                              return SizedBox();
+                            }
                             return OverflowBox(
                               // Allow the screenshot to overflow to the full
                               // screen size and then scale it down to meet
@@ -212,35 +216,37 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                             child: ScaleAndFade(
                               progress: sheetProgress,
                               minScale: .7,
-                              child: ControlsColumn(
-                                mode: mode,
-                                activeColor: painterController.drawColor,
-                                colors: widget.drawColors,
-                                onColorChanged: (color) {
-                                  setState(() {
-                                    painterController.drawColor = color;
-                                  });
-                                  _hideKeyboard(context);
-                                },
-                                onUndo: () {
-                                  painterController.undo();
-                                  _hideKeyboard(context);
-                                },
-                                onClearDrawing: () {
-                                  painterController.clear();
-                                  _hideKeyboard(context);
-                                },
-                                onControlModeChanged: (mode) {
-                                  setState(() {
-                                    this.mode = mode;
-                                    _hideKeyboard(context);
-                                  });
-                                },
-                                onCloseFeedback: () {
-                                  _hideKeyboard(context);
-                                  BetterFeedback.of(context).hide();
-                                },
-                              ),
+                              child: widget.mode == FeedbackMode.hidden
+                                  ? SizedBox()
+                                  : ControlsColumn(
+                                      mode: mode,
+                                      activeColor: painterController.drawColor,
+                                      colors: widget.drawColors,
+                                      onColorChanged: (color) {
+                                        setState(() {
+                                          painterController.drawColor = color;
+                                        });
+                                        _hideKeyboard(context);
+                                      },
+                                      onUndo: () {
+                                        painterController.undo();
+                                        _hideKeyboard(context);
+                                      },
+                                      onClearDrawing: () {
+                                        painterController.clear();
+                                        _hideKeyboard(context);
+                                      },
+                                      onControlModeChanged: (mode) {
+                                        setState(() {
+                                          this.mode = mode;
+                                          _hideKeyboard(context);
+                                        });
+                                      },
+                                      onCloseFeedback: () {
+                                        _hideKeyboard(context);
+                                        BetterFeedback.of(context).hide();
+                                      },
+                                    ),
                             ),
                           ),
                         ),

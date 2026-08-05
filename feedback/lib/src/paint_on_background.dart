@@ -8,11 +8,14 @@ class PaintOnChild extends StatelessWidget {
     super.key,
     required this.child,
     required this.isPaintingActive,
+    required this.shouldViewPainting,
     required this.controller,
   });
 
   final Widget child;
   final bool isPaintingActive;
+  final bool shouldViewPainting;
+
   final PainterController controller;
 
   @override
@@ -20,7 +23,8 @@ class PaintOnChild extends StatelessWidget {
     return Stack(
       children: <Widget>[
         child,
-        if (isPaintingActive) Painter(controller),
+        if (shouldViewPainting)
+          Painter(controller, isPainting: isPaintingActive),
       ],
     );
   }

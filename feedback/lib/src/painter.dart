@@ -3,18 +3,29 @@
 import 'package:flutter/widgets.dart' hide Image;
 
 class Painter extends StatefulWidget {
-  Painter(this.painterController)
+  Painter(this.painterController, {required this.isPainting})
       : super(key: ValueKey<PainterController>(painterController));
 
   final PainterController painterController;
-
+  final bool isPainting;
   @override
   State<Painter> createState() => _PainterState();
 }
 
 class _PainterState extends State<Painter> {
-  @override
   Widget build(BuildContext context) {
+    final paintWidget = CustomPaint(
+      willChange: true,
+      painter: _PainterPainter(
+        widget.painterController._pathHistory,
+        repaint: widget.painterController,
+      ),
+    );
+
+    if (!widget.isPainting) {
+      return SizedBox.expand(child: paintWidget);
+    }
+
     return SizedBox.expand(
       child: GestureDetector(
         onPanStart: _onPanStart,

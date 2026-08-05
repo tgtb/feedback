@@ -158,6 +158,9 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                     controller: painterController,
                     isPaintingActive:
                         mode == FeedbackMode.draw && widget.isFeedbackVisible,
+                    shouldViewPainting: widget.isFeedbackVisible &&
+                        (mode == FeedbackMode.view ||
+                            mode == FeedbackMode.draw),
                     child: widget.child,
                   ),
                 ),

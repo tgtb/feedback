@@ -29,11 +29,18 @@ class FeedbackBottomSheet extends StatelessWidget {
         ),
       );
     }
+    final feedbackTheme = FeedbackTheme.of(context);
+    double feedbackHeight =
+        MediaQuery.of(context).size.height * feedbackTheme.feedbackSheetHeight;
+    final tempMinHeight = feedbackTheme.feedbackSheetMinHeight;
+    if (tempMinHeight != null && feedbackHeight < tempMinHeight) {
+      feedbackHeight = tempMinHeight;
+    }
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
-        height: MediaQuery.of(context).size.height *
-            FeedbackTheme.of(context).feedbackSheetHeight,
+        height: feedbackHeight,
         child: Material(
           color: FeedbackTheme.of(context).feedbackSheetColor,
           // Pass a null scroll controller because the sheet is not drag

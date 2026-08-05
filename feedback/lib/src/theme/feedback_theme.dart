@@ -36,6 +36,7 @@ class FeedbackThemeData {
       {this.background = Colors.grey,
       this.feedbackSheetColor = _lightGrey,
       this.feedbackSheetHeight = .25,
+      this.feedbackSheetMinHeight,
       this.activeFeedbackModeColor = _blue,
       this.drawColors = _defaultDrawColors,
       this.bottomSheetDescriptionStyle = _defaultBottomSheetDescriptionStyle,
@@ -59,8 +60,8 @@ class FeedbackThemeData {
         dragHandleColor ?? (isDark ? Colors.black26 : Colors.white38);
     this.colorScheme = colorScheme ??
         (isDark
-            ? ColorScheme.dark(background: background)
-            : ColorScheme.light(background: background));
+            ? ColorScheme.dark(surface: background)
+            : ColorScheme.light(surface: background));
   }
 
   /// Create a dark version of the [FeedbackThemeData]
@@ -102,6 +103,11 @@ class FeedbackThemeData {
   /// Values between .2 and .3 are usually ideal.
   final double feedbackSheetHeight;
 
+  /// The minimum height of the bottom sheet screen height.
+  ///
+  /// It will override feedbackSheetHeight if the height is too small.
+  final double? feedbackSheetMinHeight;
+
   /// The color to highlight the currently selected feedback mode.
   final Color activeFeedbackModeColor;
 
@@ -133,6 +139,7 @@ class FeedbackThemeData {
     Color? background,
     Color? feedbackSheetColor,
     double? feedbackSheetHeight,
+    double? feedbackSheetMinHeight,
     Color? activeFeedbackModeColor,
     List<Color>? drawColors,
     TextStyle? bottomSheetDescriptionStyle,
@@ -146,6 +153,8 @@ class FeedbackThemeData {
       background: background ?? this.background,
       feedbackSheetColor: feedbackSheetColor ?? this.feedbackSheetColor,
       feedbackSheetHeight: feedbackSheetHeight ?? this.feedbackSheetHeight,
+      feedbackSheetMinHeight:
+          feedbackSheetMinHeight ?? this.feedbackSheetMinHeight,
       activeFeedbackModeColor:
           activeFeedbackModeColor ?? this.activeFeedbackModeColor,
       drawColors: drawColors ?? this.drawColors,

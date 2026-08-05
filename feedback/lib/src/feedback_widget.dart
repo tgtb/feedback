@@ -182,23 +182,28 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                           minOpacity: .01,
                           child: LayoutBuilder(builder: (context, constraints) {
                             final size = MediaQuery.of(context).size;
-                            return OverflowBox(
-                              // Allow the screenshot to overflow to the full
-                              // screen size and then scale it down to meet
-                              // it's parent's constraints.
-                              maxWidth: size.width,
-                              maxHeight: size.height,
-                              child: ScaleAndClip(
-                                progress: animation.value,
-                                // Scale down to fit the constraints.
-                                // `_FeedbackLayoutDelegate` ensures that the
-                                // constraints are the same aspect ratio as
-                                // the query size.
-                                scaleFactor: constraints.maxWidth / size.width,
-                                child: LayoutBuilder(
-                                    builder: (context, constraints) {
-                                  return screenshotChild!;
-                                }),
+                            return AbsorbPointer(
+                              absorbing: !animation.isDismissed &&
+                                  mode == FeedbackMode.view,
+                              child: OverflowBox(
+                                // Allow the screenshot to overflow to the full
+                                // screen size and then scale it down to meet
+                                // it's parent's constraints.
+                                maxWidth: size.width,
+                                maxHeight: size.height,
+                                child: ScaleAndClip(
+                                  progress: animation.value,
+                                  // Scale down to fit the constraints.
+                                  // `_FeedbackLayoutDelegate` ensures that the
+                                  // constraints are the same aspect ratio as
+                                  // the query size.
+                                  scaleFactor:
+                                      constraints.maxWidth / size.width,
+                                  child: LayoutBuilder(
+                                      builder: (context, constraints) {
+                                    return screenshotChild!;
+                                  }),
+                                ),
                               ),
                             );
                           }),
@@ -212,35 +217,37 @@ class FeedbackWidgetState extends State<FeedbackWidget>
                             child: ScaleAndFade(
                               progress: sheetProgress,
                               minScale: .7,
-                              child: ControlsColumn(
-                                mode: mode,
-                                activeColor: painterController.drawColor,
-                                colors: widget.drawColors,
-                                onColorChanged: (color) {
-                                  setState(() {
-                                    painterController.drawColor = color;
-                                  });
-                                  _hideKeyboard(context);
-                                },
-                                onUndo: () {
-                                  painterController.undo();
-                                  _hideKeyboard(context);
-                                },
-                                onClearDrawing: () {
-                                  painterController.clear();
-                                  _hideKeyboard(context);
-                                },
-                                onControlModeChanged: (mode) {
-                                  setState(() {
-                                    this.mode = mode;
-                                    _hideKeyboard(context);
-                                  });
-                                },
-                                onCloseFeedback: () {
-                                  _hideKeyboard(context);
-                                  BetterFeedback.of(context).hide();
-                                },
-                              ),
+                              child: mode == FeedbackMode.view
+                                  ? SizedBox()
+                                  : ControlsColumn(
+                                      mode: mode,
+                                      activeColor: painterController.drawColor,
+                                      colors: widget.drawColors,
+                                      onColorChanged: (color) {
+                                        setState(() {
+                                          painterController.drawColor = color;
+                                        });
+                                        _hideKeyboard(context);
+                                      },
+                                      onUndo: () {
+                                        painterController.undo();
+                                        _hideKeyboard(context);
+                                      },
+                                      onClearDrawing: () {
+                                        painterController.clear();
+                                        _hideKeyboard(context);
+                                      },
+                                      onControlModeChanged: (mode) {
+                                        setState(() {
+                                          this.mode = mode;
+                                          _hideKeyboard(context);
+                                        });
+                                      },
+                                      onCloseFeedback: () {
+                                        _hideKeyboard(context);
+                                        BetterFeedback.of(context).hide();
+                                      },
+                                    ),
                             ),
                           ),
                         ),

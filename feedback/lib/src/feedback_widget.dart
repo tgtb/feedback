@@ -82,6 +82,9 @@ class FeedbackWidgetState extends State<FeedbackWidget>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BetterFeedback.of(context).addListener(feedbackListener);
+    });
     BackButtonInterceptor.add(backButtonIntercept);
   }
 
@@ -89,6 +92,7 @@ class FeedbackWidgetState extends State<FeedbackWidget>
   void dispose() {
     super.dispose();
     _controller.dispose();
+    BetterFeedback.of(context).removeListener(feedbackListener);
     BackButtonInterceptor.remove(backButtonIntercept);
   }
 
@@ -296,6 +300,10 @@ class FeedbackWidgetState extends State<FeedbackWidget>
         ),
       ],
     );
+  }
+
+  void feedbackListener() {
+    painterController.clear();
   }
 
   @visibleForTesting
